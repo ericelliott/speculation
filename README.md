@@ -52,7 +52,12 @@ A speculation is exactly like a promise, except for these changes:
 The signature is:
 
 ```js
-speculation((resolve: Function, reject: Function, handleCancel: Function) => Void, shouldCancel: Promise) => Promise
+speculation(fn: PromiseFunction, shouldCancel: Promise) => Promise
+
+// Similar to the function passed into the Promise constructor.
+// A function to pass into speculation() which
+// performs promise setup, resolve, reject, and cleanup.
+PromiseFunction(resolve: Function, reject: Function, handleCancel: Function) => Void
 ```
 
 As you can see from the signature, **speculations are promises**, meaning they share exactly the same promise interface. Anything that understands promises can use speculations instead. There are no extra properties on speculation objects.
@@ -73,6 +78,12 @@ Some clever people have figured out that there's a way to use `Promise.race()` a
 ### Forgetting to handle a rejected cancel promise
 
 Did you know that Chrome throws warning messages all over the console when you forget to handle a promise rejection? Oops! `speculation()` handles that for you, so you can get on with building your app.
+
+### Overly complex
+
+The [withdrawn TC39 proposal](https://github.com/tc39/proposal-cancelable-promises) for cancellation proposed a separate messaging channel for cancellations. It also used a new concept called a cancellation token. In my opinion, the solution would have considerably bloated the promise spec, and the only feature it would have provided that speculations don't directly support is the separation of rejections and cancellations, which, IMO, is not necessary to begin with.
+
+Will you want to do switching depending on whether there is an exception, or a cancellation? Yes, absolutely. Is that the promises job? In my opinion, no, it's not.
 
 ## How does it work?
 

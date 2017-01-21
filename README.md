@@ -26,7 +26,7 @@ import speculation from 'speculation';
 
 const wait = (
   time,
-  cancel = Promise.reject() // By default, don't cancel
+  cancel = Promise.reject('Cancelled') // By default, don't cancel
 ) => speculation((resolve, reject, onCancel) => {
   const timer = setTimeout(resolve, time);
 

@@ -91,7 +91,7 @@ const speculation = (
 See that `wait()` utility in these docs? You can use it by importing it:
 
 ```js
-import { wait } from 'speculation';
+import wait from 'speculation/wait';
 
 wait(500).then(() => {
   console.log('OMG I can time things!');

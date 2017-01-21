@@ -90,7 +90,7 @@ Will you want to do switching depending on whether there is an exception, or a c
 ```js
 const speculation = (
   fn,
-  cancel = new Promise.reject() // No cancel by default
+  cancel = new Promise.reject('Cancelled') // No cancel by default
 ) => new Promise((resolve, reject) => {
   const noop = () => {}; // Prevent unhandled rejections
 
@@ -98,7 +98,7 @@ const speculation = (
     onCancel
   ) => cancel.then(onCancel, noop);
 
-  return fn(resolve, reject, handleCancel);
+  fn(resolve, reject, handleCancel);
 });
 ```
 

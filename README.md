@@ -2,6 +2,11 @@
 
 JavaScript promises are made to be broken. Speculations are cancellable promises.
 
+## Status
+
+Should work in production apps, but is not production tested yet. Please kick the tires and report any issues you encounter.
+
+
 ## Getting started
 
 Install:

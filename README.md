@@ -99,7 +99,7 @@ Basically, like this:
 ```js
 const speculation = (
   fn,
-  cancel = new Promise.reject('Cancelled') // No cancel by default
+  cancel = Promise.reject() // No cancel by default
 ) => new Promise((resolve, reject) => {
   const noop = () => {}; // Prevent unhandled rejections
 

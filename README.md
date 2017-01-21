@@ -114,7 +114,7 @@ wait(500).then(() => {
 });
 
 // Of course, you can cancel it by resolving
-// the `shouldReject` promise:
+// the `shouldCancel` promise:
 wait(200, wait(50)).then(
   () => {
     console.log('nothing to see here'); // never runs

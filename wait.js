@@ -1,1 +1,1 @@
-module.exports = require('src/wait');
+module.exports = require('./src/wait');

@@ -52,7 +52,7 @@ wait(200, wait(50)).then(
 A speculation is exactly like a promise, except for these changes:
 
 * Speculations can be easily cancelled. Simply pass a `shouldCancel` promise into the speculation during creation.
-* `new` is not required when creating a speculation.
+* `new` is not required when creating a speculation. (That would be extra typing for no benefit).
 
 The signature is:
 
@@ -92,6 +92,8 @@ Will you want to do switching depending on whether there is an exception, or a c
 
 ## How does it work?
 
+Basically, like this:
+
 ```js
 const speculation = (
   fn,
@@ -106,6 +108,9 @@ const speculation = (
   fn(resolve, reject, handleCancel);
 });
 ```
+
+The actual implementation is different in order to support old browsers, but this is the gist. It's basically a thin wrapper around a call to the native `Promise` constructor. It exposes a very similar API to the native `Promise` constructor, dropping the `new` requirement (because it's extra typing for no benefit), and taking one extra parameter to handle promise cancellation.
+
 
 # Bonus
 

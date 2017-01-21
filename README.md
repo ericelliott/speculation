@@ -88,7 +88,7 @@ Did you know that Chrome throws warning messages all over the console when you f
 
 The [withdrawn TC39 proposal](https://github.com/tc39/proposal-cancelable-promises) for cancellation proposed a separate messaging channel for cancellations. It also used a new concept called a cancellation token. In my opinion, the solution would have considerably bloated the promise spec, and the only feature it would have provided that speculations don't directly support is the separation of rejections and cancellations, which, IMO, is not necessary to begin with.
 
-Will you want to do switching depending on whether there is an exception, or a cancellation? Yes, absolutely. Is that the promises job? In my opinion, no, it's not.
+Will you want to do switching depending on whether there is an exception, or a cancellation? Yes, absolutely. Is that the promise's job? In my opinion, no, it's not.
 
 ## How does it work?
 

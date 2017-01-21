@@ -1,0 +1,34 @@
+{
+  "name": "speculation",
+  "version": "1.0.0",
+  "description": "JavaScript promises are made to be broken. Speculations are cancellable promises.",
+  "main": "speculation.js",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "node src/index.test.js",
+    "watch": "watch 'npm run -s lint && npm run -s test' src",
+    "update": "updtr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericelliott/speculation.git"
+  },
+  "keywords": [
+    "Promise",
+    "promises",
+    "cancel",
+    "cancellable"
+  ],
+  "author": "Eric Elliott",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericelliott/speculation/issues"
+  },
+  "homepage": "https://github.com/ericelliott/speculation#readme",
+  "devDependencies": {
+    "eslint": "3.14.0",
+    "tape": "4.6.3",
+    "updtr": "0.2.3",
+    "watch": "1.0.1"
+  }
+}

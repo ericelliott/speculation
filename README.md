@@ -2,6 +2,8 @@
 
 JavaScript promises are made to be broken. Speculations are cancellable promises.
 
+More specifically, a speculation is an ES6 standard promise that works as a drop-in replacement anywhere promises can be used.
+
 ## Status
 
 Should work in production apps, but is not production tested yet. Please kick the tires and report any issues you encounter.

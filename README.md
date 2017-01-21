@@ -48,7 +48,12 @@ A speculation is exactly like a promise, except for these changes:
 
 * Speculations can be easily cancelled. Simply pass a `shouldCancel` promise into the speculation during creation.
 * `new` is not required when creating a speculation.
-* The signature is `speculation((resolve, reject, handleCancel) => Void) => Promise`
+
+The signature is:
+
+```js
+speculation((resolve: Function, reject: Function, handleCancel: Function) => Void, shouldCancel: Promise) => Promise
+```
 
 As you can see from the signature, **speculations are promises**, meaning they share exactly the same promise interface. Anything that understands promises can use speculations instead. There are no extra properties on speculation objects.
 

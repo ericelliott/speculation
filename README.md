@@ -32,7 +32,7 @@ speculation(fn: PromiseFunction, shouldCancel: Promise) => Promise
 // Similar to the function passed into the Promise constructor.
 // A function to pass into speculation() which
 // performs promise setup, resolve, reject, and cleanup.
-PromiseFunction(resolve: Function, reject: Function, handleCancel: Function) => Void
+PromiseFunction(resolve: Function, reject: Function, onCancel: Function) => Void
 ```
 
 As you can see from the signature, **speculations are promises**, meaning they share exactly the same promise interface. Anything that understands promises can use speculations instead. There are no extra properties on speculation objects.
@@ -69,30 +69,7 @@ wait(200, wait(50)).then(
 ); // [Error: Cancelled]
 ```
 
-
-## Why?
-
-Promises don't have a built-in cancel mechanism. Many people hack it in in various ways. Here are some problems I've seen with those hacks:
-
-### Adding .cancel() to the promise
-
-Adding `.cancel()` makes the promise non-standard, but it also violates another rule of promises: Only the function that creates the promise should be able to resolve, reject, or cancel the promise. Exposing it breaks that encapsulation, and encourages people to write code that manipulates the promise in places that shouldn't know about it. Avoid spaghetti and broken promises.
-
-### Forgetting to clean up
-
-Some clever people have figured out that there's a way to use `Promise.race()` as a cancellation mechanism. The problem with that is that cancellation control is taken from the function that creates the promise, which is the only place that you can conduct proper cleanup activities, such as clearing timeouts or freeing up memory by clearing references to data, etc...
-
-### Forgetting to handle a rejected cancel promise
-
-Did you know that Chrome throws warning messages all over the console when you forget to handle a promise rejection? Oops! `speculation()` handles that for you, so you can get on with building your app.
-
-### Overly complex
-
-The [withdrawn TC39 proposal](https://github.com/tc39/proposal-cancelable-promises) for cancellation proposed a separate messaging channel for cancellations. It also used a new concept called a cancellation token. In my opinion, the solution would have considerably bloated the promise spec, and the only feature it would have provided that speculations don't directly support is the separation of rejections and cancellations, which, IMO, is not necessary to begin with.
-
-Will you want to do switching depending on whether there is an exception, or a cancellation? Yes, absolutely. Is that the promise's job? In my opinion, no, it's not.
-
-## How does it work?
+### How does it work?
 
 Basically, like this:
 
@@ -117,6 +94,28 @@ const speculation = (
 The actual implementation is different in order to support old browsers, but this is the gist. It's basically a thin wrapper around a call to the native `Promise` constructor. It exposes a very similar API to the native `Promise` constructor, dropping the `new` requirement (because it's extra typing for no benefit), and taking one extra parameter to handle promise cancellation.
 
 
+## Why Speculations?
+
+Promises don't have a built-in cancel mechanism. Many people hack it in in various ways. Here are some problems I've seen with those hacks:
+
+### Adding .cancel() to the promise
+
+Adding `.cancel()` makes the promise non-standard, but it also violates another rule of promises: Only the function that creates the promise should be able to resolve, reject, or cancel the promise. Exposing it breaks that encapsulation, and encourages people to write code that manipulates the promise in places that shouldn't know about it. Avoid spaghetti and broken promises.
+
+### Forgetting to clean up
+
+Some clever people have figured out that there's a way to use `Promise.race()` as a cancellation mechanism. The problem with that is that cancellation control is taken from the function that creates the promise, which is the only place that you can conduct proper cleanup activities, such as clearing timeouts or freeing up memory by clearing references to data, etc...
+
+### Forgetting to handle a rejected cancel promise
+
+Did you know that Chrome throws warning messages all over the console when you forget to handle a promise rejection? Oops! `speculation()` handles that for you, so you can get on with building your app.
+
+### Overly complex
+
+The [withdrawn TC39 proposal](https://github.com/tc39/proposal-cancelable-promises) for cancellation proposed a separate messaging channel for cancellations. It also used a new concept called a cancellation token. In my opinion, the solution would have considerably bloated the promise spec, and the only feature it would have provided that speculations don't directly support is the separation of rejections and cancellations, which, IMO, is not necessary to begin with.
+
+Will you want to do switching depending on whether there is an exception, or a cancellation? Yes, absolutely. Is that the promise's job? In my opinion, no, it's not.
+
 # Bonus
 
 See that `wait()` utility in these docs? You can use it by importing it:
@@ -137,3 +136,11 @@ wait(200, wait(50)).then(
   (e) => console.log(e) // [Error: Cancelled]
 );
 ```
+
+Learn JavaScript with Eric Elliott
+==================================
+<a href="https://ericelliottjs.com"><img width="1200" alt="eejs-screenshot" src="https://cloud.githubusercontent.com/assets/364727/8640836/76d86618-28c3-11e5-8b6e-27d9cd72180e.png"></a>
+
+[![Join the chat at https://gitter.im/learn-javascript-courses/javascript-questions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/learn-javascript-courses/javascript-questions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+An online course series for application developers. Ready to jump in? [Learn more](https://ericelliottjs.com/).

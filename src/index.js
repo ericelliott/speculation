@@ -1,4 +1,5 @@
 var speculation = function speculation (fn) {
+  // Don't cancel by default:
   var cancel = (
     arguments.length > 1 &&
     arguments[1] !== undefined
@@ -10,8 +11,11 @@ var speculation = function speculation (fn) {
     var handleCancel = function handleCancel (onCancel) {
       return cancel.then(
         onCancel,
+        // Filter out the expected "not cancelled" rejection:
         noop
       ).catch(function (e) {
+        // Reject the speculation if there's a an error in
+        // onCancel:
         return reject(e);
       });
     };

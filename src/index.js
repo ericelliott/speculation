@@ -8,9 +8,9 @@ var speculation = function speculation (fn) {
   return new Promise(function (resolve, reject) {
     var noop = function noop () {};
 
-    var handleCancel = function handleCancel (onCancel) {
+    var onCancel = function onCancel (handleCancel) {
       return cancel.then(
-        onCancel,
+        handleCancel,
         // Filter out the expected "not cancelled" rejection:
         noop
       ).catch(function (e) {
@@ -20,7 +20,7 @@ var speculation = function speculation (fn) {
       });
     };
 
-    return fn(resolve, reject, handleCancel);
+    return fn(resolve, reject, onCancel);
   });
 };
 

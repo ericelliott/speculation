@@ -16,13 +16,13 @@ var speculation = function speculation (fn) {
     var isFulfilled = false;
 
     // When the callsite resolves, mark the promise as fulfilled.
-    var resolve = function resolver (input) {
+    var resolve = function resolve (input) {
       isFulfilled = true;
       _resolve(input);
     };
 
     // When the callsite rejects, mark the promise as fulfilled.
-    var reject = function rejecter (input) {
+    var reject = function reject (input) {
       isFulfilled = true;
       _reject(input);
     };

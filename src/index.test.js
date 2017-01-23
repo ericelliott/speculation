@@ -41,3 +41,24 @@ test('speculation cancelled on time', assert => {
     }
   );
 });
+
+test('speculation that throws in onCancel', assert => {
+  const msg = 'should handle onCancel error';
+
+  const faultyWait = (
+    time,
+    cancel = Promise.resolve()
+  ) => speculation((resolve, reject, onCancel) => {
+    onCancel(() => {
+      throw new Error('Oops!');
+    });
+  }, cancel);
+
+  faultyWait(30).catch(e => {
+    const actual = e.message;
+    const expected = 'Oops!';
+
+    assert.same(actual, expected, msg);
+    assert.end();
+  });
+});

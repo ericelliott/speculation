@@ -17,7 +17,27 @@ Install:
 npm install --save speculation
 ```
 
-Use:
+### What is a Speculation?
+
+A speculation is exactly like a promise, except for these changes:
+
+* Speculations can be easily cancelled. Simply pass a `shouldCancel` promise into the speculation during creation.
+* `new` is not required when creating a speculation. (That would be extra typing for no benefit).
+
+The signature is:
+
+```js
+speculation(fn: PromiseFunction, shouldCancel: Promise) => Promise
+
+// Similar to the function passed into the Promise constructor.
+// A function to pass into speculation() which
+// performs promise setup, resolve, reject, and cleanup.
+PromiseFunction(resolve: Function, reject: Function, handleCancel: Function) => Void
+```
+
+As you can see from the signature, **speculations are promises**, meaning they share exactly the same promise interface. Anything that understands promises can use speculations instead. There are no extra properties on speculation objects.
+
+### Example: Cancellable wait()
 
 Let's use it to create a cancellable `wait()` function. It'll take `time` in ms, and a promise to use as `shouldCancel`. When the time runs out, the promise will resolve. If the wait is cancelled, the returned promise will reject with a 'Cancelled' error.
 
@@ -48,26 +68,6 @@ wait(200, wait(50)).then(
   (e) => console.log(e)
 ); // [Error: Cancelled]
 ```
-
-## What is a Speculation?
-
-A speculation is exactly like a promise, except for these changes:
-
-* Speculations can be easily cancelled. Simply pass a `shouldCancel` promise into the speculation during creation.
-* `new` is not required when creating a speculation. (That would be extra typing for no benefit).
-
-The signature is:
-
-```js
-speculation(fn: PromiseFunction, shouldCancel: Promise) => Promise
-
-// Similar to the function passed into the Promise constructor.
-// A function to pass into speculation() which
-// performs promise setup, resolve, reject, and cleanup.
-PromiseFunction(resolve: Function, reject: Function, handleCancel: Function) => Void
-```
-
-As you can see from the signature, **speculations are promises**, meaning they share exactly the same promise interface. Anything that understands promises can use speculations instead. There are no extra properties on speculation objects.
 
 
 ## Why?
@@ -105,7 +105,10 @@ const speculation = (
 
   const handleCancel = (
     onCancel
-  ) => cancel.then(onCancel, noop);
+  ) => cancel.then(onCancel, noop)
+    // handle onCancel errors
+    .catch(e => reject(e))
+  ;
 
   fn(resolve, reject, handleCancel);
 });

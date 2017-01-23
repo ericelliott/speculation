@@ -32,7 +32,7 @@ speculation(fn: PromiseFunction, shouldCancel: Promise) => Promise
 // Similar to the function passed into the Promise constructor.
 // A function to pass into speculation() which
 // performs promise setup, resolve, reject, and cleanup.
-PromiseFunction(resolve: Function, reject: Function, handleCancel: Function) => Void
+PromiseFunction(resolve: Function, reject: Function, onCancel: Function) => Void
 ```
 
 As you can see from the signature, **speculations are promises**, meaning they share exactly the same promise interface. Anything that understands promises can use speculations instead. There are no extra properties on speculation objects.

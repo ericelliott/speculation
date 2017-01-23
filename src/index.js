@@ -10,10 +10,30 @@ var speculation = function speculation (fn) {
     arguments[1] !== undefined
   ) ? arguments[1] : Promise.reject();
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (_resolve, _reject) {
+    // Track if the promise becomes resolved or rejected to
+    // avoid invoking onCancel after a promise becomes isFulfilled.
+    var isFulfilled = false;
+
+    // When the callsite resolves, mark the promise as fulfilled.
+    var resolve = function resolve (input) {
+      isFulfilled = true;
+      _resolve(input);
+    };
+
+    // When the callsite rejects, mark the promise as fulfilled.
+    var reject = function reject (input) {
+      isFulfilled = true;
+      _reject(input);
+    };
+
     var onCancel = function onCancel (handleCancel) {
+      var maybeHandleCancel = function (value) {
+        if (!isFulfilled) handleCancel(value);
+      };
+
       return cancel.then(
-        handleCancel,
+        maybeHandleCancel,
         // Ignore expected cancel rejections:
         noop
       )

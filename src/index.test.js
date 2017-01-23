@@ -62,3 +62,25 @@ test('speculation that throws in onCancel', assert => {
     assert.end();
   });
 });
+
+test('speculation promise resolved before cancel', assert => {
+  const msg = 'onCancel should not run';
+
+  const testWait = (
+    time,
+    cancel = Promise.resolve()
+  ) => speculation((resolve, reject, onCancel) => {
+    onCancel(() => {
+      assert.fail(msg);
+    });
+    setTimeout(resolve, time);
+  }, cancel);
+
+  testWait(20, wait(50)).then(() => {
+    assert.pass('success callback should be called');
+  });
+
+  wait(60).then(() => {
+    assert.end();
+  });
+});

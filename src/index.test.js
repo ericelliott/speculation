@@ -1,4 +1,5 @@
 const test = require('tape');
+const sinon = require('sinon');
 const speculation = require('./index');
 const wait = require('./wait');
 
@@ -61,4 +62,24 @@ test('speculation that throws in onCancel', assert => {
     assert.same(actual, expected, msg);
     assert.end();
   });
+});
+
+test('speculation handles cancellation only during pending promises', assert => {
+  const msg = 'onCancel should not have been called';
+  const cancelled = sinon.spy();
+
+  const raceAvoidance = (
+    time,
+    cancel
+  ) => speculation((resolve, reject, onCancel) => {
+    onCancel(cancelled);
+    setTimeout(resolve, time);
+  }, cancel);
+
+  raceAvoidance(50, wait(100))
+    .catch(() => {}) // noop to ensure .then is executed
+    .then(() => {
+      assert.same(cancelled.callCount, 0, msg);
+      assert.end();
+    });
 });

@@ -1,26 +1,29 @@
+var noop = function noop () {};
+
+// HOF Wraps the native Promise API
+// to add take a shouldCancel promise and add
+// an onCancel() callback.
 var speculation = function speculation (fn) {
-  // Don't cancel by default:
+  // Don't cancel by default
   var cancel = (
     arguments.length > 1 &&
     arguments[1] !== undefined
   ) ? arguments[1] : Promise.reject();
 
   return new Promise(function (resolve, reject) {
-    var noop = function noop () {};
-
     var onCancel = function onCancel (handleCancel) {
       return cancel.then(
         handleCancel,
-        // Filter out the expected "not cancelled" rejection:
+        // Ignore expected cancel rejections:
         noop
-      ).catch(function (e) {
-        // Reject the speculation if there's a an error in
-        // onCancel:
+      )
+      // handle onCancel errors
+      .catch(function (e) {
         return reject(e);
       });
     };
 
-    return fn(resolve, reject, onCancel);
+    fn(resolve, reject, onCancel);
   });
 };
 

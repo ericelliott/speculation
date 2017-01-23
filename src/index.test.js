@@ -84,3 +84,23 @@ test('speculation promise resolved before cancel', assert => {
     assert.end();
   });
 });
+
+test('fromPromise should initialize a speculation', assert => {
+  const msg = 'should reject';
+
+  const testWait = time => new Promise(resolve => setTimeout(resolve, time));
+
+  speculation.fromPromise(
+    testWait(20),
+    testWait(10)
+  ).then(
+    () => {
+      assert.fail(msg);
+      assert.end();
+    },
+    () => {
+      assert.pass(msg);
+      assert.end();
+    }
+  );
+});

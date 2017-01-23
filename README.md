@@ -71,7 +71,7 @@ wait(200, wait(50)).then(
 
 ### How does it work?
 
-Basically, like this:
+Here's the gist:
 
 ```js
 const speculation = (
@@ -91,7 +91,9 @@ const speculation = (
 });
 ```
 
-The actual implementation is different in order to support old browsers, but this is the gist. It's basically a thin wrapper around a call to the native `Promise` constructor. It exposes a very similar API to the native `Promise` constructor, dropping the `new` requirement (because it's extra typing for no benefit), and taking one extra parameter to handle promise cancellation.
+The actual implementation is different in order to support old browsers and handle edge-cases, but this is the gist. **Important note: For illustration purposes only! Use the official library for proper edge-case handling in production**.
+
+It's basically a thin wrapper around a call to the native `Promise` constructor. It exposes a very similar API to the native `Promise` constructor, dropping the `new` requirement (because it's extra typing for no benefit), and taking one extra parameter to handle promise cancellation.
 
 
 ## Why Speculations?

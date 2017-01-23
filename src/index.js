@@ -12,24 +12,24 @@ var speculation = function speculation (fn) {
 
   return new Promise(function (_resolve, _reject) {
     // Track if the promise becomes resolved or rejected to
-    // avoid invoking onCancel after a promise becomes isFulfilled.
-    var isFulfilled = false;
+    // avoid invoking onCancel after a promise becomes isSettled.
+    var isSettled = false;
 
     // When the callsite resolves, mark the promise as fulfilled.
     var resolve = function resolve (input) {
-      isFulfilled = true;
+      isSettled = true;
       _resolve(input);
     };
 
     // When the callsite rejects, mark the promise as fulfilled.
     var reject = function reject (input) {
-      isFulfilled = true;
+      isSettled = true;
       _reject(input);
     };
 
     var onCancel = function onCancel (handleCancel) {
       var maybeHandleCancel = function (value) {
-        if (!isFulfilled) handleCancel(value);
+        if (!isSettled) handleCancel(value);
       };
 
       return cancel.then(

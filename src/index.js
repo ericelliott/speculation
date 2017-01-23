@@ -10,33 +10,30 @@ var speculation = function speculation (fn) {
     arguments[1] !== undefined
   ) ? arguments[1] : Promise.reject();
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (_resolve, _reject) {
     // Track if the promise becomes resolved or rejected to
-    // avoid invoking onCancel after a promise becomes completed.
-    var completed = false;
+    // avoid invoking onCancel after a promise becomes isFulfilled.
+    var isFulfilled = false;
 
-    // When the callsite resolves, mark the promise as completed.
-    var resolver = function resolver (input) {
-      completed = true;
-      resolve(input);
+    // When the callsite resolves, mark the promise as fulfilled.
+    var resolve = function resolver (input) {
+      isFulfilled = true;
+      _resolve(input);
     };
 
-    // When the callsite rejects, mark the promise as completed.
-    var rejecter = function rejecter (input) {
-      completed = true;
-      reject(input);
+    // When the callsite rejects, mark the promise as fulfilled.
+    var reject = function rejecter (input) {
+      isFulfilled = true;
+      _reject(input);
     };
 
     var onCancel = function onCancel (handleCancel) {
-      // Notify the cancellation if the promise has not completed.
-      var handleCancelIfCompleted = function handleCancelIfCompleted () {
-        if (!completed) {
-          handleCancel();
-        }
+      var maybeHandleCancel = function (value) {
+        if (!isFulfilled) handleCancel(value);
       };
 
       return cancel.then(
-        handleCancelIfCompleted,
+        maybeHandleCancel,
         // Ignore expected cancel rejections:
         noop
       )
@@ -46,7 +43,7 @@ var speculation = function speculation (fn) {
       });
     };
 
-    fn(resolver, rejecter, onCancel);
+    fn(resolve, reject, onCancel);
   });
 };
 

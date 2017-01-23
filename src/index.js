@@ -2,7 +2,7 @@ var speculation = function speculation (fn) {
   var cancel = (
     arguments.length > 1 &&
     arguments[1] !== undefined
-  ) ? arguments[1] : Promise.reject('Cancelled');
+  ) ? arguments[1] : Promise.reject();
 
   return new Promise(function (resolve, reject) {
     var noop = function noop () {};

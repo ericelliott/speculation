@@ -1,6 +1,6 @@
 {
   "name": "speculation",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "JavaScript promises are made to be broken. Speculations are cancellable promises.",
   "main": "speculation.js",
   "scripts": {

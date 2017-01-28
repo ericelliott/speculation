@@ -20,3 +20,25 @@ test('fromPromise', assert => {
     }
   );
 });
+
+test('fromPromise', assert => {
+  const msg = 'should handle onCancel error';
+  fromPromise(
+    testWait(20),
+    testWait(10),
+    () => {
+      throw new Error('onCancel');
+    }
+  ).then(
+    () => {
+      assert.fail(msg);
+      assert.end();
+    },
+    (e) => {
+      const actual = e.message;
+      const expected = 'onCancel';
+      assert.same(actual, expected, msg);
+      assert.end();
+    }
+  );
+});

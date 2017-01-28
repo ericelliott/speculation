@@ -3,6 +3,7 @@ const speculation = require('./index');
 const wait = require('./wait');
 
 require('./wait.test.js');
+require('./fromPromise.test.js');
 
 test('speculation with resolved shouldCancel', assert => {
   const msg = 'should call handleCancel';
@@ -83,24 +84,4 @@ test('speculation promise resolved before cancel', assert => {
   wait(60).then(() => {
     assert.end();
   });
-});
-
-test('fromPromise should initialize a speculation', assert => {
-  const msg = 'should reject';
-
-  const testWait = time => new Promise(resolve => setTimeout(resolve, time));
-
-  speculation.fromPromise(
-    testWait(20),
-    testWait(10)
-  ).then(
-    () => {
-      assert.fail(msg);
-      assert.end();
-    },
-    () => {
-      assert.pass(msg);
-      assert.end();
-    }
-  );
 });

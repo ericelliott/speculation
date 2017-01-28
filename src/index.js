@@ -47,13 +47,4 @@ var speculation = function speculation (fn) {
   });
 };
 
-// Statically initialize a speculation
-speculation.fromPromise = function (promise, cancel, handleCancel) {
-  return speculation((resolve, reject, onCancel) => {
-    promise.then(resolve);
-    promise.catch(reject);
-    onCancel(handleCancel);
-  }, cancel);
-};
-
 module.exports = speculation;

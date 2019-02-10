@@ -28,7 +28,7 @@
   "devDependencies": {
     "eslint": "3.19.0",
     "tape": "4.6.3",
-    "updtr": "0.2.3",
+    "updtr": "3.1.0",
     "watch": "1.0.2"
   }
 }

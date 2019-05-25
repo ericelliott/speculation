@@ -27,7 +27,7 @@
   "homepage": "https://github.com/ericelliott/speculation#readme",
   "devDependencies": {
     "eslint": "5.16.0",
-    "tape": "4.10.1",
+    "tape": "4.10.2",
     "updtr": "3.1.0",
     "watch": "1.0.2"
   }

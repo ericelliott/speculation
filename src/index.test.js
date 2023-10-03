@@ -3,6 +3,7 @@ const speculation = require('./index');
 const wait = require('./wait');
 
 require('./wait.test.js');
+require('./fromPromise.test.js');
 
 test('speculation with resolved shouldCancel', assert => {
   const msg = 'should call handleCancel';
